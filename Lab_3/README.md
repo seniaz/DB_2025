@@ -293,3 +293,147 @@ WHERE Username LIKE '%reader%';
 ```
 Показує користувачів, у логіні яких є слово reader.  
 ![31](screenshots/31.png)
+
+## INSERT (SELECT) → UPDATE (SELECT) → DELETE (SELECT)
+
+Нижче наведена повна послідовність операцій `INSERT`, `UPDATE` та `DELETE`, які виконуються з використанням підзапитів `SELECT` для перевірки результатів.
+
+```sql
+INSERT INTO Users (Username, Email, Password, Nickname, AvatarURL) 
+VALUES ('temp_user', 'temp.user@example.com', '$2b$12$temppassword', 'TempUser', NULL);
+```
+Створює тимчасового користувача для тестових операцій.
+
+```sql
+SELECT * FROM Users WHERE Username = 'temp_user';
+```
+Перевіряє, що користувача успішно додано.  
+![32](screenshots/32.png)
+
+```sql
+INSERT INTO Rating (UserID, BookID, Score) 
+VALUES (
+    (SELECT UserID FROM Users WHERE Username = 'temp_user'),
+    1,
+    3.5
+);
+```
+Додає оцінку для книги `BookID = 1` від створеного користувача.
+
+```sql
+SELECT UserID, BookID, Score 
+FROM Rating 
+WHERE UserID = (SELECT UserID FROM Users WHERE Username = 'temp_user');
+```
+Перевіряє, що оцінку збережено коректно.  
+![33](screenshots/33.png)
+
+```sql
+INSERT INTO Review (UserID, BookID, ReviewText, ReviewDate) 
+VALUES (
+    (SELECT UserID FROM Users WHERE Username = 'temp_user'),
+    1,
+    'This is a temporary review for testing purposes. The book is interesting but quite dark.',
+    CURRENT_TIMESTAMP
+);
+```
+Створює тестовий відгук до тієї ж книги від тимчасового користувача.
+
+```sql
+SELECT UserID, BookID, ReviewText, ReviewDate
+FROM Review 
+WHERE UserID = (SELECT UserID FROM Users WHERE Username = 'temp_user');
+```
+Підтверджує, що відгук збережено.  
+![34](screenshots/34.png)
+
+---
+
+```sql
+UPDATE Users 
+SET Nickname = 'UpdatedTempUser',
+    Email = 'updated.temp@example.com'
+WHERE Username = 'temp_user';
+```
+Оновлює e-mail і нікнейм тимчасового користувача.
+
+```sql
+SELECT Username, Email, Nickname FROM Users WHERE Username = 'temp_user';
+```
+Перевіряє застосування змін у таблиці користувачів.  
+![35](screenshots/35.png)
+
+```sql
+UPDATE Rating 
+SET Score = 4.0 
+WHERE UserID = (SELECT UserID FROM Users WHERE Username = 'temp_user')
+  AND BookID = 1;
+```
+Підвищує оцінку користувача для книги `BookID = 1` до `4.0`.
+
+```sql
+SELECT UserID, BookID, Score 
+FROM Rating 
+WHERE UserID = (SELECT UserID FROM Users WHERE Username = 'temp_user');
+```
+Перевіряє оновлене значення оцінки.  
+![36](screenshots/36.png)
+
+```sql
+UPDATE Review 
+SET ReviewText = 'Updated review: After re-reading, I appreciate this book more. The dystopian themes are very relevant.',
+    LastEditDate = CURRENT_TIMESTAMP
+WHERE UserID = (SELECT UserID FROM Users WHERE Username = 'temp_user')
+  AND BookID = 1;
+```
+Оновлює текст відгуку та фіксує час останнього редагування.
+
+```sql
+SELECT UserID, ReviewText, LastEditDate
+FROM Review 
+WHERE UserID = (SELECT UserID FROM Users WHERE Username = 'temp_user');
+```
+Перевіряє, що оновлення відгуку застосовано.  
+![37](screenshots/37.png)
+
+---
+
+```sql
+DELETE FROM Rating 
+WHERE UserID = (SELECT UserID FROM Users WHERE Username = 'temp_user')
+  AND BookID = 1;
+```
+Видаляє тестову оцінку користувача для книги `BookID = 1`.
+
+```sql
+SELECT * FROM Rating 
+WHERE UserID = (SELECT UserID FROM Users WHERE Username = 'temp_user');
+```
+Переконується, що оцінку видалено.  
+![38](screenshots/38.png)
+
+```sql
+DELETE FROM Review 
+WHERE UserID = (SELECT UserID FROM Users WHERE Username = 'temp_user')
+  AND BookID = 1;
+```
+Видаляє тестовий відгук користувача до книги `BookID = 1`.
+
+```sql
+SELECT * FROM Review 
+WHERE UserID = (SELECT UserID FROM Users WHERE Username = 'temp_user');
+```
+Переконується, що відгук видалено.  
+![39](screenshots/39.png)
+
+```sql
+DELETE FROM Users 
+WHERE Username = 'temp_user';
+```
+Видаляє тимчасового користувача з таблиці `Users`.
+
+```sql
+SELECT * FROM Users WHERE Username = 'temp_user';
+```
+Фінальна перевірка — користувач має бути відсутній.  
+![40](screenshots/40.png)
