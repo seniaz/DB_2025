@@ -3,7 +3,7 @@
 
 ---
 
-###Суть роботи
+### Суть роботи
 
 У цій лабораторній реалізовано **перехід від ER-моделі (Лабораторна №1)** до **фізичної реляційної схеми бази даних у PostgreSQL**.  
 На основі діаграми з попередньої роботи створено SQL-схему системи **Book Rating System**, що забезпечує всі сутності, атрибути та зв’язки між ними.
@@ -35,31 +35,31 @@
 | 9 | **BookGenre** | Асоціативна таблиця M:N між Book ↔ Genre |
 
 
-### 🖼️ Скріншоти таблиць у pgAdmin
+### Скріншоти таблиць у pgAdmin
 
-#### 1️⃣ Таблиця `Users`
+#### Таблиця `Users`
 ![Users Table](screenshots/users_table.png)
 
-#### 2️⃣ Таблиця `Publisher`
+#### Таблиця `Publisher`
 ![Publisher Table](screenshots/publisher_table.png)
 
-#### 3️⃣ Таблиця `Author`
+#### Таблиця `Author`
 ![Author Table](screenshots/author_table.png)
 
-#### 4️⃣ Таблиця `Genre`
+#### Таблиця `Genre`
 ![Genre Table](screenshots/genre_table.png)
 
-#### 5️⃣ Таблиця `Book`
+#### Таблиця `Book`
 ![Book Table](screenshots/book_table.png)
 
-#### 6️⃣ Таблиця `Rating`
+#### Таблиця `Rating`
 ![Rating Table](screenshots/rating_table.png)
 
-#### 7️⃣ Таблиця `Review`
+#### Таблиця `Review`
 ![Review Table](screenshots/review_table.png)
 
-#### 8️⃣ Таблиця `BookAuthor`
+#### Таблиця `BookAuthor`
 ![BookAuthor Table](screenshots/bookauthor_table.png)
 
-#### 9️⃣ Таблиця `BookGenre`
+#### Таблиця `BookGenre`
 ![BookGenre Table](screenshots/bookgenre_table.png)
