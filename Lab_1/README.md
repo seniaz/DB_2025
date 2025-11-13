@@ -120,7 +120,7 @@
 | Поле | Тип | Опис |
 |------|------|------|
 | `RatingID` | PK, SERIAL | Ідентифікатор оцінки |
-| `UserID` | FK → User.UserID | Хто оцінив |
+| `UserID` | FK → Users.UserID | Хто оцінив |
 | `BookID` | FK → Book.BookID | Яку книгу оцінили |
 | `Score` | DECIMAL(2,1) | Оцінка (1–5) |
 
@@ -136,7 +136,7 @@
 | Поле | Тип | Опис |
 |------|------|------|
 | `ReviewID` | PK, SERIAL | Ідентифікатор відгуку |
-| `UserID` | FK → User.UserID | Автор відгуку |
+| `UserID` | FK → Users.UserID | Автор відгуку |
 | `BookID` | FK → Book.BookID | Книга, до якої написано відгук |
 | `ReviewText` | TEXT | Текст відгуку |
 | `ReviewDate` | TIMESTAMP | Дата створення |
@@ -179,8 +179,8 @@
 
 | Зв’язок | Тип | Поля (FK → PK) | Опис |
 |----------|------|----------------|------|
-| User → Rating | 1:N | Rating.UserID → User.UserID | Користувач може мати багато оцінок |
-| User → Review | 1:N | Review.UserID → User.UserID | Користувач може мати багато відгуків |
+| Users → Rating | 1:N | Rating.UserID → Users.UserID | Користувач може мати багато оцінок |
+| Users → Review | 1:N | Review.UserID → Users.UserID | Користувач може мати багато відгуків |
 | Book → Rating | 1:N | Rating.BookID → Book.BookID | Книга може мати багато оцінок |
 | Book → Review | 1:N | Review.BookID → Book.BookID | Книга може мати багато відгуків |
 | Book ↔ Author | M:N | BookAuthor.BookID → Book.BookID, BookAuthor.AuthorID → Author.AuthorID | Книги з кількома авторами |
