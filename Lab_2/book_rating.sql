@@ -27,7 +27,9 @@ CREATE TABLE IF NOT EXISTS Publisher (
 
 CREATE TABLE IF NOT EXISTS Author (
     AuthorID SERIAL PRIMARY KEY,
-    FullName VARCHAR(100) NOT NULL,
+    FirstName VARCHAR(50) NOT NULL,
+	MiddleName VARCHAR(50),
+	LastName VARCHAR(50) NOT NULL,
     Country VARCHAR(50),
     BirthDate DATE,
     DeathDate DATE CHECK (DeathDate IS NULL OR DeathDate >= BirthDate),
@@ -99,12 +101,12 @@ INSERT INTO Publisher (Name, Country, Website, FoundedYear) VALUES
 ('Vintage Books', 'United States', 'https://vintagebooks.com', 1954),
 ('Macmillan Publishers', 'United Kingdom', 'https://macmillan.com', 1843);
 
-INSERT INTO Author (FullName, Country, BirthDate, DeathDate, Biography) VALUES
-('George Orwell', 'United Kingdom', '1903-06-25', '1950-01-21', 'English novelist, essayist, journalist, and critic known for his dystopian novels.'),
-('J.K. Rowling', 'United Kingdom', '1965-07-31', NULL, 'British author, best known for writing the Harry Potter fantasy series.'),
-('Harper Lee', 'United States', '1926-04-28', '2016-02-19', 'American novelist widely known for To Kill a Mockingbird, published in 1960.'),
-('F. Scott Fitzgerald', 'United States', '1896-09-24', '1940-12-21', 'American novelist and short story writer, famous for The Great Gatsby.'),
-('Jane Austen', 'United Kingdom', '1775-12-16', '1817-07-18', 'English novelist known for her six major novels about British landed gentry.');
+INSERT INTO Author (FirstName, MiddleName, LastName, Country, BirthDate, DeathDate, Biography) VALUES
+('George', NULL, 'Orwell', 'United Kingdom', '1903-06-25', '1950-01-21', 'English novelist, essayist, journalist, and critic known for his dystopian novels.'),
+('Joanne', 'Kathleen', 'Rowling', 'United Kingdom', '1965-07-31', NULL, 'British author, best known for writing the Harry Potter fantasy series.'),
+('Harper', NULL, 'Lee', 'United States', '1926-04-28', '2016-02-19', 'American novelist widely known for To Kill a Mockingbird, published in 1960.'),
+('Francis', 'Scott', 'Fitzgerald', 'United States', '1896-09-24', '1940-12-21', 'American novelist and short story writer, famous for The Great Gatsby.'),
+('Jane', NULL, 'Austen', 'United Kingdom', '1775-12-16', '1817-07-18', 'English novelist known for her six major novels about British landed gentry.');
 
 INSERT INTO Genre (Name, Description) VALUES
 ('Dystopian Fiction', 'Works depicting oppressive societies and totalitarian regimes'),
