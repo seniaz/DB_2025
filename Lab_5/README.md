@@ -7,9 +7,13 @@
 
 ## Результати коротко
 
-**База даних вже знаходиться в 3NF (Третій Нормальній Формі)!**
+**База даних приведена до строгої 3NF (Третьої Нормальної Форми)!**
 
-Схема спроектована правильно з самого початку, тому **жодних змін не потрібно**.
+Схема спроектована майже правильно, але **виявлено одну проблему**: таблиця `Author` містила складний атрибут `FullName`, який порушував 1NF.
+
+**ВИПРАВЛЕННЯ:** `FullName` розділено на `FirstName`, `MiddleName`, `LastName`
+
+Тепер **усі таблиці строго відповідають 3NF**!
 
 ---
 
@@ -101,13 +105,16 @@ PublisherID → Name, Country, Website, FoundedYear
 
 ---
 
-### 3. Таблиця Author
+### 3. Таблиця Author **[ВИПРАВЛЕНО!]**
 
-**Структура:**
+**Структура БУЛА (порушувала 1NF):**
+
+Початкова версія (до нормалізації)
+
 ```sql
 CREATE TABLE Author (
     AuthorID SERIAL PRIMARY KEY,
-    FullName VARCHAR(100) NOT NULL,
+    FullName VARCHAR(100) NOT NULL,  -- ПРОБЛЕМА: складний атрибут!
     Country VARCHAR(50),
     BirthDate DATE,
     DeathDate DATE CHECK (DeathDate IS NULL OR DeathDate >= BirthDate),
@@ -116,22 +123,78 @@ CREATE TABLE Author (
 );
 ```
 
-**Функціональні залежності:**
+**Виявлена проблема:**
+- `FullName = "George Orwell"` - це **складний атрибут**
+- Можна розділити на `FirstName` + `LastName`
+- **Порушує 1NF**, тому що атрибут не атомарний
+
+**Структура СТАЛА (відповідає 1NF):**
+```sql
+CREATE TABLE Author (
+    AuthorID SERIAL PRIMARY KEY,
+    FirstName VARCHAR(50) NOT NULL,    -- Атомарний
+    MiddleName VARCHAR(50),            -- Атомарний (опціонально)
+    LastName VARCHAR(50) NOT NULL,     -- Атомарний
+    Country VARCHAR(50),
+    BirthDate DATE,
+    DeathDate DATE CHECK (DeathDate IS NULL OR DeathDate >= BirthDate),
+    PhotoURL TEXT,
+    Biography TEXT
+);
+```
+
+**Функціональні залежності (оновлено):**
+
+**БУЛО:**
 ```
 AuthorID → FullName, Country, BirthDate, DeathDate, PhotoURL, Biography
 ```
 
+**СТАЛО:**
+```
+AuthorID → FirstName, MiddleName, LastName, Country, BirthDate, DeathDate, PhotoURL, Biography
+```
+
 **Аналіз нормальних форм:**
 
-| Форма | Статус | Пояснення |
-|-------|--------|-----------|
-| 1NF | ✅ | Всі атрибути атомарні |
-| 2NF | ✅ | Первинний ключ простий |
-| 3NF | ✅ | Всі неключові атрибути залежать безпосередньо від AuthorID |
+| Форма | Статус (БУЛО) | Статус (СТАЛО) | Пояснення |
+|-------|---------------|----------------|-----------|
+| 1NF | ❌ | ✅ | Атрибути тепер атомарні (FirstName, MiddleName, LastName) |
+| 2NF | ✅ | ✅ | Первинний ключ простий (AuthorID) |
+| 3NF | ✅ | ✅ | Всі неключові атрибути залежать безпосередньо від AuthorID |
 
-**Висновок:** Таблиця знаходиться в **3NF** ✅
+**Чому FullName порушував 1NF:**
 
----
+1. **Складний атрибут:**
+   - "George Orwell" складається з FirstName + LastName
+   - Можна розділити на менші атомарні частини
+
+2. **Практичні проблеми:**
+```sql
+-- Ненадійний пошук за прізвищем
+SELECT * FROM Author WHERE FullName LIKE '% Orwell';
+
+-- Неправильне сортування (за ім'ям, а не прізвищем)
+SELECT * FROM Author ORDER BY FullName;
+
+-- Складно отримати формат "Прізвище, Ім'я"
+```
+
+3. **Переваги нової структури:**
+```sql
+-- Простий пошук за прізвищем
+SELECT * FROM Author WHERE LastName = 'Orwell';
+
+-- Правильне сортування
+SELECT * FROM Author ORDER BY LastName, FirstName;
+
+-- Гнучкість форматування
+SELECT LastName || ', ' || FirstName AS FormattedName FROM Author;
+SELECT FirstName || ' ' || COALESCE(MiddleName || ' ', '') || LastName AS FullName 
+FROM Author;
+```
+
+**Висновок:** Таблиця **ВИПРАВЛЕНА** та знаходиться в **3NF** ✅
 
 ### 4. Таблиця Genre
 
@@ -351,7 +414,7 @@ CREATE TABLE BookGenre (
 
 ### ER-діаграма
 
-![ER Diagram Lab1](../Lab_1/Lab_1.png)
+![ER Diagram Lab1](../Lab_5/ER-diagram.png)
 
 ### Опис зв'язків
 
