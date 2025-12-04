@@ -4,10 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "generate": "npx prisma generate",
     "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "prisma": {
-    "seed": "npx ts-node prisma/seed.ts"
   },
   "keywords": [],
   "author": "",
@@ -19,5 +17,8 @@
     "prisma": "^6.19.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
+  },
+  "prisma": {
+    "seed": "npm run generate && npx ts-node prisma/seed.ts"
   }
 }
