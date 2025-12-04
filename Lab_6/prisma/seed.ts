@@ -20,14 +20,14 @@ async function main() {
 
   await prisma.users.createMany({
     data: [
-      { userid: 1, username: 'john_reader', email: 'john.smith@example.com', password: '$2b$12$hashedpassword1', nickname: 'Johnny', avatarurl: null },
-      { userid: 2, username: 'maria_book', email: 'maria.garcia@example.com', password: '$2b$12$hashedpassword2', nickname: 'Mary', avatarurl: null },
-      { userid: 3, username: 'alex_critic', email: 'alex.johnson@example.com', password: '$2b$12$hashedpassword3', nickname: 'Alex', avatarurl: null },
-      { userid: 4, username: 'sarah_fan', email: 'sarah.williams@example.com', password: '$2b$12$hashedpassword4', nickname: 'Sara', avatarurl: null },
-      { userid: 5, username: 'david_scholar', email: 'david.brown@example.com', password: '$2b$12$hashedpassword5', nickname: 'Dave', avatarurl: null },
+      { userid: 1, username: 'john_reader', email: 'john.smith@example.com', password: '$2b$12$hashedpassword1', nickname: 'Johnny' },
+      { userid: 2, username: 'maria_book', email: 'maria.garcia@example.com', password: '$2b$12$hashedpassword2', nickname: 'Mary' },
+      { userid: 3, username: 'alex_critic', email: 'alex.johnson@example.com', password: '$2b$12$hashedpassword3', nickname: 'Alex' },
+      { userid: 4, username: 'sarah_fan', email: 'sarah.williams@example.com', password: '$2b$12$hashedpassword4', nickname: 'Sara' },
+      { userid: 5, username: 'david_scholar', email: 'david.brown@example.com', password: '$2b$12$hashedpassword5', nickname: 'Dave' },
     ]
   });
-
+  
   await prisma.publisher.createMany({
     data: [
       { publisherid: 1, name: 'Penguin Random House', country: 'United States', website: 'https://penguinrandomhouse.com', foundedyear: 1927 },

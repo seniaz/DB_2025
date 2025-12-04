@@ -110,7 +110,8 @@ model users {
   email       String       @unique @db.VarChar(100)
   password    String       @db.VarChar(255)
   nickname    String?      @db.VarChar(50)
-  avatarurl   String?
+  createdat   DateTime     @default(now()) @db.Timestamp(6) 
+  updatedat   DateTime     @updatedAt @db.Timestamp(6)
   rating      rating[]
   review      review[]
   readinglist readinglist[]
