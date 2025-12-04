@@ -1,6 +1,5 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -38,6 +37,7 @@ model book {
   bookgenre       bookgenre[]
   rating          rating[]
   review          review[]
+  readinglist     readinglist[]
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -105,12 +105,25 @@ model review {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model users {
-  userid    Int      @id @default(autoincrement())
-  username  String   @unique @db.VarChar(50)
-  email     String   @unique @db.VarChar(100)
-  password  String   @db.VarChar(255)
-  nickname  String?  @db.VarChar(50)
-  avatarurl String?
-  rating    rating[]
-  review    review[]
+  userid      Int          @id @default(autoincrement())
+  username    String       @unique @db.VarChar(50)
+  email       String       @unique @db.VarChar(100)
+  password    String       @db.VarChar(255)
+  nickname    String?      @db.VarChar(50)
+  avatarurl   String?
+  rating      rating[]
+  review      review[]
+  readinglist readinglist[]
+}
+
+model readinglist {
+  readinglistid Int      @id @default(autoincrement())
+  userid        Int
+  bookid        Int
+  status        String   @db.VarChar(20)
+  addeddate     DateTime @default(now()) @db.Timestamp(6)
+  book          book     @relation(fields: [bookid], references: [bookid], onDelete: Cascade)
+  users         users    @relation(fields: [userid], references: [userid], onDelete: Cascade)
+
+  @@unique([userid, bookid])
 }

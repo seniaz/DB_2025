@@ -1,24 +1,29 @@
 {
   "name": "lab_6",
   "version": "1.0.0",
-  "description": "",
+  "description": "Prisma ORM Lab 6",
   "main": "index.js",
-  "scripts": {
-    "generate": "npx prisma generate",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "type": "commonjs",
+  "scripts": {
+    "generate": "prisma generate",
+    "migrate": "prisma migrate dev",
+    "reset": "prisma migrate reset --force",
+    "seed": "ts-node --transpile-only prisma/seed.ts",
+    "db:seed": "prisma db seed",
+    "start": "ts-node index.ts",
+    "test": "echo \"No tests configured\""
+  },
+  "prisma": {
+    "seed": "npm run seed"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.0",
+    "dotenv": "^17.2.3"
+  },
   "devDependencies": {
-    "@types/node": "^24.10.1",
-    "nodemon": "^3.1.11",
+    "@types/node": "^20.11.19",
     "prisma": "^6.19.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
-  },
-  "prisma": {
-    "seed": "npm run generate && npx ts-node prisma/seed.ts"
   }
 }

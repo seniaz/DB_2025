@@ -6,6 +6,7 @@ async function main() {
   console.log('Starting database seeding...');
 
   await prisma.review.deleteMany();
+  await prisma.readinglist.deleteMany();  
   await prisma.rating.deleteMany();
   await prisma.bookauthor.deleteMany();
   await prisma.bookgenre.deleteMany();
@@ -122,6 +123,18 @@ async function main() {
     ]
   });
 
+  await prisma.readinglist.createMany({  // ДОДАНО
+    data: [
+      { userid: 1, bookid: 4, status: 'reading' },
+      { userid: 1, bookid: 5, status: 'want_to_read' },
+      { userid: 2, bookid: 3, status: 'completed' },
+      { userid: 3, bookid: 2, status: 'reading' },
+      { userid: 4, bookid: 1, status: 'want_to_read' },
+      { userid: 5, bookid: 5, status: 'completed' },
+    ]
+  });
+
+
   const tables = [
     { name: 'users', pk: 'userid' },
     { name: 'publisher', pk: 'publisherid' },
@@ -130,6 +143,7 @@ async function main() {
     { name: 'book', pk: 'bookid' },
     { name: 'rating', pk: 'ratingid' },
     { name: 'review', pk: 'reviewid' },
+    { name: 'readinglist', pk: 'readinglistid' },
   ];
 
   for (const table of tables) {
